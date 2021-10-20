@@ -32,5 +32,17 @@ namespace EsempioEntityFramework.Controllers
         {
             return _service.AddNew(newSuperEroe);
         }
+
+        [HttpGet("{id}")]
+        public SuperEroe GetById([FromRoute] int id)
+        {
+            return _service.GetById(id);
+        }
+
+        [HttpDelete("{id}")]
+        public SuperEroe DeleteById([FromRoute] int id)
+        {
+            return _service.DeleteById(id);
+        }
     }
 }

@@ -28,13 +28,24 @@ namespace EsempioEntityFramework.Services
             // a salvare le modifiche sul DB, fin quando non viene richiamato
             // il metodo SaveChanges(), ci dà la possibilità di effettuare un
             // RollBack Automatico, qualora ci fossero dei problemi
-            _ctx.SaveChanges();
+            _ctx.SaveChanges(); // ATTENZIONE BISOGNA RICORDARSI DI FARLO!!!!
             return addedObj.Entity;
         }
 
         public SuperEroe DeleteById(int id)
         {
-            throw new NotImplementedException();
+            // Sempre per mezzo di Linq, vado a trovare l'entity da rimuovere
+            var toBeRemoved = _ctx.SuperHeroes.FirstOrDefault(hero => hero.Id == id);
+            if (toBeRemoved is null)
+            {
+                return toBeRemoved;
+            }
+            // Per mezzo del metodo Remove, a cui passo l'oggetto da rimuovere dal DB
+            _ctx.SuperHeroes.Remove(toBeRemoved);
+            // Ricordarsi di effettuare SaveChanges
+            _ctx.SaveChanges();
+            // Lo restituisco in quanto richiesto dalla firma del metodo
+            return toBeRemoved;
         }
 
         public List<SuperEroe> GetAll()
@@ -52,7 +63,7 @@ namespace EsempioEntityFramework.Services
 
         public SuperEroe GetById(int id)
         {
-            throw new NotImplementedException();
+            return _ctx.SuperHeroes.FirstOrDefault(hero => hero.Id == id);
         }
     }
 }

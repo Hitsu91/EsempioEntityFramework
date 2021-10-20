@@ -28,10 +28,20 @@ namespace EsempioEntityFramework
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var dbAddress = "server=localhost;port=3306;database=heroes;uid=root;password=root";
             // Questa configurazione fa in modo di abilitare 
             // l'EF con il database in memoria di prova!
             services.AddDbContext<DataContext>(
-                opt => opt.UseInMemoryDatabase("SuperHeroes")
+                // opt => opt.UseInMemoryDatabase("SuperHeroes")
+                // UseMySql abilita il Db MySQL, gli dobbiamo fornire
+                // l'indirizzo del DB e la versione del Server MySQL
+                // Possiamo sfruttare tuttavia la classe ServerVersion
+                // che ci mette a disposizione un Metodo helper che va a controllare
+                // la versione data la stringa di connessione
+                opt => opt.UseMySql(
+                    connectionString: dbAddress,
+                    serverVersion: ServerVersion.AutoDetect(dbAddress)
+                )
             );
             // Aggiungo alle dependencies le nostro classi Services
             // In modo che poi nel controller saremo in grado di farci
